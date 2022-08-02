@@ -71,7 +71,7 @@ class Card(models.Model):
         ('D','Debit Card')
     )
     card_type = models.CharField(max_length=30,null=True,choices=type)
-    expiry_date = models.DateTimeField(default=" ")
+    expiry_date = models.DateTimeField(default=timezone.now)
     card_status = models.CharField(max_length=30,null=True)
     security_code = models.IntegerField(null=True)
     wallet = models.ForeignKey(Wallet, on_delete=models.CASCADE,null=True)
@@ -97,7 +97,7 @@ class Notification(models.Model):
     date_and_time=models.DateTimeField(default=datetime.now)
 
 class Receipt(models.Model):
-    receipt_type = models.CharField(max_length=5,null=True)
+    receipt_type = models.CharField(max_length=15,null=True)
     receipt_date = models.DateTimeField()
     bill_number = models.IntegerField(null=True)
     total_amount = models.IntegerField(null=True)
@@ -105,7 +105,7 @@ class Receipt(models.Model):
 
 class Loan(models.Model):
     loan_id = models.IntegerField(null=True)
-    loan_type = models.CharField(max_length=5,null=True)
+    loan_type = models.CharField(max_length=15,null=True)
     amount = models.IntegerField(default=0)
     wallet = models.ForeignKey(Wallet,on_delete=models.CASCADE,null=True)
     interest_rate = models.IntegerField(null=True)
