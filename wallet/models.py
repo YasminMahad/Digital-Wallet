@@ -3,7 +3,7 @@ from django.utils import timezone
 from email.policy import default
 from django.db import models
 from datetime import datetime
-
+from .models import *
 
 
 # Create your models here.
@@ -16,7 +16,7 @@ class Customer(models.Model):
     )
     gender = models.CharField(max_length=10,null=True,choices=gender_type)
     address = models.TextField()
-    age = models.PositiveIntegerField()
+    age = models.IntegerField()
     nationality = models.CharField(max_length=15,null=True)
     phone_number = models.CharField(max_length=15,null=True)
     email = models.EmailField()
@@ -39,11 +39,7 @@ class Wallet(models.Model):
 
 class Account(models.Model):
     account_number = models.IntegerField(default=0)
-    accountChoice = (
-        ('f','fixed account'),
-        ('c','current account')
-    )
-    account_type = models.CharField(max_length=30,null=True,choices=accountChoice)
+    account_type = models.CharField(max_length=30,null=True)
     balance = models.IntegerField(default=0)
     wallet = models.ForeignKey(Wallet, on_delete= models.CASCADE,null=True)
 
@@ -51,14 +47,10 @@ class Transaction(models.Model):
     transaction_code = models.IntegerField(null=True)
     wallet = models.ForeignKey(Wallet, on_delete=models.CASCADE,null=True)
     transaction_amount = models.IntegerField(null=True)
-    trans_type = (
-        ('D','Deposite'),
-        ('W','Withdrawal')
-    )
-    transaction_type = models.CharField(max_length=30,null=True,choices=trans_type)
+    transaction_type = models.CharField(max_length=30,null=True)
     transaction_charge = models.IntegerField(null=True)
     transaction_date = models.DateTimeField(default=timezone.now)
-    transactionreciept = models.CharField(max_length=8,null=True)
+    transaction_reciept = models.CharField(max_length=8,null=True)
     origin_account = models.ForeignKey(Account, on_delete=models.CASCADE,null=True)
     #destination_account = models.ForeignKey(Account, on_delete=models.CASCADE)
 
@@ -66,25 +58,17 @@ class Card(models.Model):
     issue_date = models.CharField(max_length=30,null=True)
     card_name = models.CharField(max_length=30,null=True)
     card_number = models.IntegerField()
-    type = (
-        ('C','Credit Card'),
-        ('D','Debit Card')
-    )
-    card_type = models.CharField(max_length=30,null=True,choices=type)
+    card_type = models.CharField(max_length=30,null=True)
     expiry_date = models.DateTimeField(default=timezone.now)
     card_status = models.CharField(max_length=30,null=True)
     security_code = models.IntegerField(null=True)
     wallet = models.ForeignKey(Wallet, on_delete=models.CASCADE,null=True)
     account = models.ForeignKey(Account, on_delete=models.CASCADE,null=True)
-    issuer_type = (
-        ('M','Master Card'),
-        ('V','Visa Card')
-    )
-    issuer = models.CharField(max_length=30,null=True,choices=issuer_type)
+    issuer = models.CharField(max_length=30,null=True)
 
 class Thirdparty(models.Model):
     name = models.CharField(max_length=15,null=True)
-    transaction_account = models.IntegerField(null=True)
+    transaction_amount = models.IntegerField(null=True)
     account = models.ForeignKey(Account,on_delete=models.CASCADE,null=True)
     currency = models.CharField(max_length=3,null=True)
     location = models.CharField(max_length=15,null=True)
